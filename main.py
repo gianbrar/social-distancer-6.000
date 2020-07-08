@@ -1,11 +1,11 @@
 import cv2
 import time
-import math
+import itertools
 
-def detect(faces):
-    if faces == 1:
+def detect(faces, run):
+    if run == 1:
         return
-
+        
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 camera = cv2.VideoCapture(0)
 
@@ -27,5 +27,6 @@ while True:
     for (x, y, w, h) in faces:
         cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
     cv2.imwrite('worked_image.png', image)
-    detect(math.factorial(len(faces)) / math.factorial(max(0, len(faces) - 2)))
+    for i in range(len(faces) * (len(faces) + 1) / 2):
+        detect(faces, i)
     time.sleep(1)
