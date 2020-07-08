@@ -2,6 +2,7 @@ import cv2
 import time
 import itertools
 import os
+import asyncio
 
 def detect(faces):
 	if len(faces) < 2:
@@ -9,6 +10,7 @@ def detect(faces):
 	for i in list(itertools.combinations(range(len(faces)), 2)):
 		if (abs(faces[i[0]][0] - faces[i[1]][0])) * 1152 >= 6:
 			os.system('espeak "WARNING. YOU ARE VIOLATING THE LAW BY NOT PRACTICING SOCIAL DISTANCING."')
+
 
 def overlap(r1p1x, r1p1y, r1p2x, r1p2y, r2p1x, r2p1y, r2p2x, r2p2y):
 	if(r1p1x >= r2p2x or r2p1x >= r1p2x):
@@ -24,7 +26,6 @@ camera = cv2.VideoCapture(0)
 timeSleep = 0
 
 print(time.time() - timeSleep)
-
 while True:
 	if timeSleep == 0:
 		return_value, image = camera.read()
@@ -53,15 +54,13 @@ while True:
 				else:
 					facesIntersect[n1] = False
 		if facesIntersect[n]:
-			sanitizedFaces.append(facesIntersect[n])
+			sanitizedFaces.append(faces[n])
 			cv2.rectangle(image, (x, y), (x+w, y+h), (255, 0, 0), 2)
 	cv2.imwrite('worked_image.png', image)
 	# Display the resulting frame
 	cv2.imshow('Video', image)
-
-
 	try:
-		detect(sanitizedFaces)
+		detect(faces)
 	except:
 		if timeSleep == 0:
 			timeSleep = time.time()
