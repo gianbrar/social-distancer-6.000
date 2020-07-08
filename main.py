@@ -1,11 +1,16 @@
 import cv2
 import time
 import itertools
+import os
 
-def detect(faces, run):
-    if run == 1:
+def detect(faces):
+    if len(faces) == 1:
         return
-        
+    for i in list(itertools.combinations(range(len(faces)), 2)):
+        if (abs(faces[i[0]][0] - faces[i[1]][0])) * 1152 >= 6:
+            os.system('espeak "WARNING. YOU ARE VIOLATING THE LAW BY NOT PRACTICING SOCIAL DISTANCING."')
+    
+
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 camera = cv2.VideoCapture(0)
 
@@ -27,6 +32,5 @@ while True:
     for (x, y, w, h) in faces:
         cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
     cv2.imwrite('worked_image.png', image)
-    for i in range(len(faces) * (len(faces) + 1) / 2):
-        detect(faces, i)
+    detect(faces)
     time.sleep(1)
