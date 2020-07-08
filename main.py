@@ -4,7 +4,7 @@ import itertools
 import os
 
 def detect(faces):
-	if len(faces) == 1:
+	if len(faces) < 2:
 		return
 	for i in list(itertools.combinations(range(len(faces)), 2)):
 		if (abs(faces[i[0]][0] - faces[i[1]][0])) * 1152 >= 6:
@@ -42,7 +42,7 @@ while True:
 
 	# Sanitize and draw a rectangle around the faces
 	facesIntersect = [True] * len(faces)
-	sanatizedFaces = []
+	sanitizedFaces = []
 	for n in range(len(faces)):
 		x, y, w, h = faces[n]
 		for n1 in range(n + 1, len(faces)):
@@ -53,7 +53,7 @@ while True:
 				else:
 					facesIntersect[n1] = False
 		if facesIntersect[n]:
-			sanatizedFaces.append(facesIntersect[n])
+			sanitizedFaces.append(facesIntersect[n])
 			cv2.rectangle(image, (x, y), (x+w, y+h), (255, 0, 0), 2)
 	cv2.imwrite('worked_image.png', image)
 	# Display the resulting frame
@@ -61,7 +61,7 @@ while True:
 
 
 	try:
-		detect(sanatizedFaces)
+		detect(sanitizedFaces)
 	except:
 		if timeSleep == 0:
 			timeSleep = time.time()
