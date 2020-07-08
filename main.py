@@ -27,5 +27,5 @@ while True:
     for (x, y, w, h) in faces:
         cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
     cv2.imwrite('worked_image.png', image)
-    detect(math.factorial(len(faces)) / (len(faces) - 2))
+    detect(math.factorial(len(faces)) / (2 * (math.factorial(len(faces) - 2))))
     time.sleep(1)
