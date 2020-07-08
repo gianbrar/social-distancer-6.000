@@ -28,9 +28,24 @@ while True:
 
     print("Found {0} faces!".format(len(faces)))
 
-    # Draw a rectangle around the faces
-    for (x, y, w, h) in faces:
-        cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
+    # Sanitize and draw a rectangle around the faces
+    facesIntersect = [True] * len(faces)
+    sanatizedFaces = []
+    for n in range(len(faces)):
+        x, y, w, h = faces[n]
+        for n1 in range(n + 1, len(faces)):
+            x1, y1, w1, h1 = faces[n1]
+            print(str(x) + ", " + str(y) + ", " + str(w)  + ", " + str(h))
+            print(str(x1) + ", " + str(y1) + ", " + str(w1)  + ", " + str(h1))
+            if overlap(x, y, x+w, y+h, x1, y1, x1+w1, y1+h1):
+                if w * h < w1 * h1 and facesIntersect[n1] == True:
+                    facesIntersect[n] = False
+                else:
+                    facesIntersect[n1] = False
+        if facesIntersect[n]:
+            sanatizedFaces.append(facesIntersect[n])
+            cv2.rectangle(image, (x, y), (x+w, y+h), (255, 0, 0), 2)
+    
     cv2.imwrite('worked_image.png', image)
-    detect(faces)
+    detect(sanatizedFaces)
     time.sleep(1)
