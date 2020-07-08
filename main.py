@@ -10,6 +10,14 @@ def detect(faces):
         if (abs(faces[i[0]][0] - faces[i[1]][0])) * 1152 >= 6:
             os.system('espeak "WARNING. YOU ARE VIOLATING THE LAW BY NOT PRACTICING SOCIAL DISTANCING."')
     
+def overlap(r1p1x, r1p1y, r1p2x, r1p2y, r2p1x, r2p1y, r2p2x, r2p2y):
+    if(r1p1x >= r2p2x or r2p1x >= r1p2x):
+        return False
+    
+    if(r1p1y >= r2p2y or r2p1y >= r1p2y):
+        return False
+    
+    return True
 
 faceCascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 camera = cv2.VideoCapture(0)
